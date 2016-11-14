@@ -13,11 +13,14 @@ public class FileChooser extends JPanel implements ActionListener {
 	private ArrayList<File> files = new ArrayList<>();
 	private JFileChooser chooser;
 	private String choosertitle;
+	private JTextField adr = new JTextField(60);
 	private static DataObject d;
 	public FileChooser() {
+		this.setMinimumSize(new Dimension(300,300));
+		adr.setEditable(false);
 		go = new JButton("Browse");
 		go.addActionListener(this);
-		
+		add(adr);
 		add(go);
 	}
 
@@ -31,6 +34,7 @@ public class FileChooser extends JPanel implements ActionListener {
 		chooser.setFileFilter(ff);
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
 			File f = chooser.getSelectedFile();
+			adr.setText(f.getAbsolutePath());
 			for(File file:f.listFiles()){
 				files.add(file);
 			}

@@ -1,33 +1,32 @@
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 public class Screen extends JFrame{
-	JPanel panel1 = new JPanel();
-	JPanel panel2 = new JPanel();
-	JPanel panel3 = new JPanel(new GridLayout(1, 1));
-	FileChooser fi;
-	PickingPane pp;
+	private BarGraph bg;
+	private PieGraph pg;
+	private JPanel panel1 = new JPanel(new BorderLayout()),panel3 = new JPanel(new BorderLayout()), panel2 = new JPanel();
+	private FileChooser fi;
+	private PickingPane pp;
 	public Screen(){
-		setSize(1300, 600);
+		setSize(1300, 700);
 		setTitle("A Bar Chart");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 		panel1();
-
 		setVisible(true);
 	}
 	public void panel1(){
 		fi = new FileChooser();
-		panel1.add(fi);
 		JButton next1 = new JButton("next");
 		next1.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(fi.getDataObject() != null){
@@ -38,7 +37,8 @@ public class Screen extends JFrame{
 				}
 			}
 		});
-		panel1.add(next1);
+		panel1.add(fi, BorderLayout.NORTH);
+		panel1.add(next1, BorderLayout.SOUTH);
 		setContentPane(panel1);
 	}
 	public void panel2(){
@@ -49,7 +49,6 @@ public class Screen extends JFrame{
 		panel2.add(pp);
 		JButton next2 = new JButton("next");
 		next2.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(pp.getSelected().length > 0){
@@ -63,11 +62,34 @@ public class Screen extends JFrame{
 		panel2.add(next2);
 	}
 	public void panel3(){
-		BarGraph bg = new BarGraph(fi.getDataObject().getRepulicans(), fi.getDataObject().getDemocratics()
-				, fi.getDataObject().getOthers(), pp.getSelected());
-		panel3.add(bg);
+		getGraphs();
+		JPanel controlPanel = new JPanel();
+		JTabbedPane tabs = new JTabbedPane();
+		JButton pie = new JButton("Change counties");
+		controlPanel.add(pie);
+		pie.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				pp.doClick();
+				getGraphs();
+				tabs.removeAll();
+				tabs.add("Pie", pg.getPieChart());
+				tabs.add("Bar", bg);
+				repaint();
+			}
+		});
+		tabs.add("Pie", pg.getPieChart());
+		tabs.add("Bar", bg);
+		panel3.add(tabs, BorderLayout.CENTER);
+		panel3.add(controlPanel, BorderLayout.WEST);
 	}
 	public static void main(String[] args) throws Exception {
 		new Screen();
+	}
+	public void getGraphs(){
+		bg = new BarGraph(fi.getDataObject().getRepulicans(), fi.getDataObject().getDemocratics()
+				, fi.getDataObject().getOthers(), pp.getSelected());
+		pg = new PieGraph(fi.getDataObject().getRepulicans(), fi.getDataObject().getDemocratics()
+				, fi.getDataObject().getOthers(), pp.getSelected());
 	}
 }
