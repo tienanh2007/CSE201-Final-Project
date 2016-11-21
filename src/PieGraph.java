@@ -17,7 +17,6 @@ public class PieGraph{
 		this.others = others;
 		this.index = index;
 		for(int i=0;i<index.length;i++){
-			System.out.println(index[i]);
 			r += repulicans.get(index[i]);
 			d += democrats.get(index[i]);
 			o += others.get(index[i]);

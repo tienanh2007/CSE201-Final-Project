@@ -13,7 +13,7 @@ import javax.swing.JTabbedPane;
 public class Screen extends JFrame{
 	private BarGraph bg;
 	private PieGraph pg;
-	private JPanel panel1 = new JPanel(new BorderLayout()),panel3 = new JPanel(new BorderLayout()), panel2 = new JPanel();
+	private JPanel panel1, panel3, panel2;
 	private FileChooser fi;
 	private PickingPane pp;
 	public Screen(){
@@ -24,6 +24,7 @@ public class Screen extends JFrame{
 		setVisible(true);
 	}
 	public void panel1(){
+		panel1 = new JPanel(new BorderLayout());
 		fi = new FileChooser();
 		JButton next1 = new JButton("next");
 		next1.addActionListener(new ActionListener() {
@@ -42,6 +43,7 @@ public class Screen extends JFrame{
 		setContentPane(panel1);
 	}
 	public void panel2(){
+		panel2 = new JPanel();
 		String[] a = new String[fi.getDataObject().getOthers().size()];
 		for(int i=0;i<a.length;i++)
 			a[i] = fi.getDataObject().getStates().get(i);
@@ -51,7 +53,7 @@ public class Screen extends JFrame{
 		next2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(pp.getSelected().length > 0){
+				if(pp.getSelected() != null && pp.getSelected().length > 0){
 					panel3();
 					setContentPane(panel3);
 					invalidate();
@@ -62,20 +64,46 @@ public class Screen extends JFrame{
 		panel2.add(next2);
 	}
 	public void panel3(){
-		getGraphs();
-		JPanel controlPanel = new JPanel();
+		panel3 = new JPanel(new BorderLayout());
+		getGraphs(pp.getSelected());
+		JPanel controlPanel = new JPanel(new GridLayout(10, 1, 1, 10));
 		JTabbedPane tabs = new JTabbedPane();
 		JButton pie = new JButton("Change counties");
+		JButton all = new JButton("Get All");
+		JButton back = new JButton("Back");
 		controlPanel.add(pie);
-		pie.addActionListener(new ActionListener() {
+		controlPanel.add(all);
+		controlPanel.add(back);
+		all.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				pp.doClick();
-				getGraphs();
+				int[] a = new int[fi.getDataObject().getDemocratics().size()];
+				for(int i=0;i<a.length;i++) a[i] = i;
+				getGraphs(a);
 				tabs.removeAll();
 				tabs.add("Pie", pg.getPieChart());
 				tabs.add("Bar", bg);
 				repaint();
+			}
+		});
+		pie.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				pp.doClick();
+				getGraphs(pp.getSelected());
+				tabs.removeAll();
+				tabs.add("Pie", pg.getPieChart());
+				tabs.add("Bar", bg);
+				repaint();
+			}
+		});
+		back.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panel1();
+				setContentPane(panel1);
+				invalidate();
+				validate();
 			}
 		});
 		tabs.add("Pie", pg.getPieChart());
@@ -86,10 +114,10 @@ public class Screen extends JFrame{
 	public static void main(String[] args) throws Exception {
 		new Screen();
 	}
-	public void getGraphs(){
+	public void getGraphs(int[] selected){
 		bg = new BarGraph(fi.getDataObject().getRepulicans(), fi.getDataObject().getDemocratics()
-				, fi.getDataObject().getOthers(), pp.getSelected());
+				, fi.getDataObject().getOthers(), selected);
 		pg = new PieGraph(fi.getDataObject().getRepulicans(), fi.getDataObject().getDemocratics()
-				, fi.getDataObject().getOthers(), pp.getSelected());
+				, fi.getDataObject().getOthers(), selected);
 	}
 }

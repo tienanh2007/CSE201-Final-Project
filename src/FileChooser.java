@@ -2,9 +2,11 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.event.*;
+import java.awt.peer.ScrollPanePeer;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.awt.*;
 
 
@@ -14,14 +16,25 @@ public class FileChooser extends JPanel implements ActionListener {
 	private JFileChooser chooser;
 	private String choosertitle;
 	private JTextField adr = new JTextField(60);
+	private JTextArea errors = new JTextArea(20,50);
+	private JScrollPane err = new JScrollPane(errors);
 	private static DataObject d;
+	private StringBuilder error = new StringBuilder();
 	public FileChooser() {
-		this.setMinimumSize(new Dimension(300,300));
+		errors.setEditable(false);
+		errors.setEnabled(false);
+		errors.setDisabledTextColor(Color.RED);
+		JPanel browsingFile = new JPanel();
+		JPanel erro = new JPanel();
 		adr.setEditable(false);
 		go = new JButton("Browse");
 		go.addActionListener(this);
-		add(adr);
-		add(go);
+		this.setLayout(new BorderLayout());
+		browsingFile.add(adr);
+		browsingFile.add(go);
+		erro.add(err);
+		add(browsingFile, BorderLayout.NORTH);
+		add(erro, BorderLayout.CENTER);
 	}
 
 	public void actionPerformed(ActionEvent e) {            
@@ -40,6 +53,13 @@ public class FileChooser extends JPanel implements ActionListener {
 			}
 			try {
 				d = new DataObject(files);
+				HashMap<Integer, ArrayList<String>> er = d.getErrors();
+				for(int a: er.keySet()){
+					for(String s:er.get(a)){
+						error.append(s+"\n");
+					}
+				}
+				errors.setText(error.toString());
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -50,9 +70,6 @@ public class FileChooser extends JPanel implements ActionListener {
 		}
 		
 		
-	}
-	public Dimension getPreferredSize(){
-		return new Dimension(200, 200);
 	}
 	public static DataObject getDataObject(){
 		return d;
