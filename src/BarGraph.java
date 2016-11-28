@@ -2,7 +2,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -38,21 +40,24 @@ public class BarGraph extends JPanel{
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(Color.GRAY);
-		g.drawLine(100, getHeight()-100, 100, getHeight()-500);
+		Graphics2D g2 = (Graphics2D) g;
+		RenderingHints hint = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHints(hint);
+		g2.setColor(Color.GRAY);
+		g2.drawLine(100, getHeight()-100, 100, getHeight()-600);
 		for(int i=0;i<11;i++){
-			g.drawLine(90, (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*30)-100), 110, (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*30)-100));
-			g.drawString(""+(int)roundForAxis((int)max, 10)*i, 10, (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*30)-100));
+			g2.drawLine(90, (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*30)-100), 110, (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*30)-100));
+			g2.drawString(""+(int)roundForAxis((int)max, 10)*i, 10, (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*30)-100));
 		}
-		g.setColor(Color.RED);
-		g.fillRect(200, (int) (getHeight()-100-repul), 200, (int)repul);
-		g.drawString("Republicans  "+r, 200, getHeight()-50);
-		g.setColor(Color.BLUE);
-		g.fillRect(450, (int) (getHeight()-100-demo), 200, (int)demo);
-		g.drawString("Democrats  "+d, 450, getHeight()-50);
-		g.setColor(Color.GRAY);
-		g.fillRect(700, (int) (getHeight()-100-other), 200, (int)other);
-		g.drawString("Others  "+o, 700, getHeight()-50);
+		g2.setColor(Color.RED);
+		g2.fillRect(200, (int) (getHeight()-100-repul), 200, (int)repul);
+		g2.drawString("Republicans  "+r, 200, getHeight()-50);
+		g2.setColor(Color.BLUE);
+		g2.fillRect(450, (int) (getHeight()-100-demo), 200, (int)demo);
+		g2.drawString("Democrats  "+d, 450, getHeight()-50);
+		g2.setColor(Color.GRAY);
+		g2.fillRect(700, (int) (getHeight()-100-other), 200, (int)other);
+		g2.drawString("Others  "+o, 700, getHeight()-50);
 	}
 	public double roundForAxis(int range, int tickCount){
 		double unroundedTickSize = range/tickCount*2;
