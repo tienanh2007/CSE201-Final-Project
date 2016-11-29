@@ -69,6 +69,11 @@ public class DataObject {
 			addError(lines, file, "Invalid county: " + datas[0]);
 			isError = true;
 		}
+		if(Integer.parseInt(datas[4]) == 0 && Integer.parseInt(datas[2]) == 0
+				&& Integer.parseInt(datas[3]) == 0){
+			addError(lines, file, "Zero number");
+			isError = true;
+		}
 		return isError;
 	}
 	private void addError(int lines, String file, String error){

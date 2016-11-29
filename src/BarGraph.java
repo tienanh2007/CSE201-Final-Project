@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -18,7 +19,7 @@ public class BarGraph extends JPanel{
 	private int r,d,o;
 	private double repul,demo,other;
 	private double max, min;
-	
+	private double scale  = 0.65;
 	public BarGraph(ArrayList<Integer> repulicans,ArrayList<Integer> democrats,ArrayList<Integer> others, int[] index){
 		this.repulicans = repulicans;
 		this.democrats = democrats;
@@ -31,9 +32,7 @@ public class BarGraph extends JPanel{
 		}
 		max = Math.max(Math.max(r, d),o);
 		min = Math.min(Math.min(r, d),o);
-		repul = (r/max)*300;
-		demo = (d/max)*300;
-		other = (o/max)*300;
+		
 		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
 	
@@ -44,20 +43,26 @@ public class BarGraph extends JPanel{
 		RenderingHints hint = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHints(hint);
 		g2.setColor(Color.GRAY);
-		g2.drawLine(100, getHeight()-100, 100, getHeight()-600);
+		while((int)(0.15*getHeight()+10*((int)roundForAxis((int)max, 10)*10/max*(int)(scale/10*getHeight()))) > getHeight()*0.95) scale-=0.05;
+		repul = (r/max)*(int)(scale*getHeight());
+		demo = (d/max)*(int)(scale*getHeight());
+		other = (o/max)*(int)(scale*getHeight());
+		g2.setFont(new Font("scalable", Font.PLAIN, (int)(0.01*(getHeight()+getWidth()))));
+		g2.drawLine((int)(0.08*getWidth()), getHeight()-(int)(0.15*getHeight()), (int)(0.08*getWidth()), (int)(getHeight()-10*((int)roundForAxis((int)max, 10)*10/max*(int)(scale/10*getHeight()))-(int)(0.15*getHeight())));
 		for(int i=0;i<11;i++){
-			g2.drawLine(90, (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*30)-100), 110, (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*30)-100));
-			g2.drawString(""+(int)roundForAxis((int)max, 10)*i, 10, (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*30)-100));
+			g2.drawLine((int)(0.07*getWidth()), (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*(int)(scale/10*getHeight()))-(int)(0.15*getHeight())),
+					(int)(0.09*getWidth()), (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*(int)(scale/10*getHeight()))-(int)(0.15*getHeight())));
+			g2.drawString(""+(int)roundForAxis((int)max, 10)*i, (int)(0.008*getWidth()), (int)(getHeight()-i*((int)roundForAxis((int)max, 10)*10/max*(int)(scale/10*getHeight()))-(int)(0.15*getHeight())));
 		}
 		g2.setColor(Color.RED);
-		g2.fillRect(200, (int) (getHeight()-100-repul), 200, (int)repul);
-		g2.drawString("Republicans  "+r, 200, getHeight()-50);
+		g2.fillRect((int)(0.2*getWidth()), (int) (getHeight()-(int)(0.15*getHeight())-repul), (int)(0.15*getWidth()), (int)repul);
+		g2.drawString("Republicans  "+r, (int)(0.2*getWidth()), getHeight()-(int)(0.07*getHeight()));
 		g2.setColor(Color.BLUE);
-		g2.fillRect(450, (int) (getHeight()-100-demo), 200, (int)demo);
-		g2.drawString("Democrats  "+d, 450, getHeight()-50);
+		g2.fillRect((int)(0.4*getWidth()), (int) (getHeight()-(int)(0.15*getHeight())-demo), (int)(0.15*getWidth()), (int)demo);
+		g2.drawString("Democrats  "+d, (int)(0.4*getWidth()), getHeight()-(int)(0.07*getHeight()));
 		g2.setColor(Color.GRAY);
-		g2.fillRect(700, (int) (getHeight()-100-other), 200, (int)other);
-		g2.drawString("Others  "+o, 700, getHeight()-50);
+		g2.fillRect((int)(0.6*getWidth()), (int) (getHeight()-(int)(0.15*getHeight())-other), (int)(0.15*getWidth()), (int)other);
+		g2.drawString("Others  "+o, (int)(0.6*getWidth()), getHeight()-(int)(0.07*getHeight()));
 	}
 	public double roundForAxis(int range, int tickCount){
 		double unroundedTickSize = range/tickCount*2;

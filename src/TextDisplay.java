@@ -25,17 +25,17 @@ public class TextDisplay extends JPanel{
 		Graphics2D g2 = (Graphics2D) g;
 		RenderingHints hint = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setRenderingHints(hint);
-		g2.setFont(new Font("Cool", Font.BOLD, 30));
+		g2.setFont(new Font("Cool", Font.BOLD, (int)(0.02*(getHeight()+getWidth()))));
 		g2.setColor(Color.RED);
-		g2.drawString("" + r, 100, 100);
+		g2.drawString("" + r, (int)(0.07*(getWidth())), (int)(0.15*(getHeight())));
 		g2.setColor(Color.BLUE);
-		g2.drawString("" + d, 100, 200);
+		g2.drawString("" + d, (int)(0.07*(getWidth())), (int)(0.3*(getHeight())));
 		g2.setColor(Color.GRAY);
-		g2.drawString("" + o, 100, 300);
-		g2.setFont(new Font("Cool", Font.PLAIN, 15));
+		g2.drawString("" + o, (int)(0.07*(getWidth())), (int)(0.45*(getHeight())));
+		g2.setFont(new Font("Cool", Font.PLAIN, (int)(0.01*(getHeight()+getWidth()))));
 		g2.setColor(Color.BLACK);
-		g2.drawString("Repulicans", 100, 120);
-		g2.drawString("Democrats", 100, 220);
-		g2.drawString("Others", 100, 320);
+		g2.drawString("Republicans", (int)(0.07*(getWidth())), (int)(0.17*(getHeight())));
+		g2.drawString("Democrats", (int)(0.07*(getWidth())), (int)(0.32*(getHeight())));
+		g2.drawString("Others", (int)(0.07*(getWidth())), (int)(0.47*(getHeight())));
 	}
 }

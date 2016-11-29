@@ -5,7 +5,10 @@ import java.awt.event.*;
 import java.awt.peer.ScrollPanePeer;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.awt.*;
 
@@ -60,6 +63,12 @@ public class FileChooser extends JPanel implements ActionListener {
 					}
 				}
 				errors.setText(error.toString());
+				Date date = new Date() ;
+				SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss") ;
+				File file = new File("Log File " + dateFormat.format(date) + ".tsv") ;
+				PrintWriter out = new PrintWriter(file);
+				out.write(error.toString());
+				out.close();
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}

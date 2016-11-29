@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -47,14 +48,15 @@ class PieChart extends JComponent {
 			curValue += slices.get(i).value;
 		}
 		g2.setColor(Color.RED);
-		g2.drawString("Republican: "+r , 25, 10);
-		g2.fillRect(10, 0, 10, 10);
+		g2.setFont(new Font("scalable", Font.PLAIN, (int)(0.009*(getHeight()+getWidth()))));
+		g2.drawString("Republicans: "+r , 25, 20);
+		g2.fillRect(10, 10, 10, 10);
 		g2.setColor(Color.BLUE);
-		g2.drawString("Democrats: "+d , 25, 25);
-		g2.fillRect(10, 15, 10, 10);
+		g2.drawString("Democrats: "+d , 25, 35);
+		g2.fillRect(10, 25, 10, 10);
 		g2.setColor(Color.GRAY);
-		g2.drawString("Others: "+o , 25, 40);
-		g2.fillRect(10, 30, 10, 10);
+		g2.drawString("Others: "+o , 25, 50);
+		g2.fillRect(10, 40, 10, 10);
 	}
 	
 }

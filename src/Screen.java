@@ -20,7 +20,7 @@ public class Screen extends JFrame{
 	private BarGraph bg;
 	private PieGraph pg;
 	private TextDisplay td;
-	private JPanel panel1, panel3, panel2;
+	private JPanel panel1, panel2;
 	private FileChooser fi;
 	private PickingPane pp;
 	private JTextArea pickedCounties = new JTextArea(30,40);
@@ -81,10 +81,7 @@ public class Screen extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(pp.getSelected() != null && pp.getSelected().length > 0){
-					panel3();
-					setContentPane(panel3);
-					invalidate();
-					validate();
+					new Window(td, bg, pg, scroller, fi, pp, pickedCounties);
 				}
 			}
 		});
@@ -94,65 +91,6 @@ public class Screen extends JFrame{
 		text.add(scroller);
 		panel2.add(buttonPanel2, BorderLayout.NORTH);
 		panel2.add(text);
-	}
-	public void panel3(){
-		panel3 = new JPanel(new BorderLayout());
-		getGraphs(pp.getSelected());
-		JPanel controlPanel = new JPanel(new GridLayout(2, 1));
-		JPanel button = new JPanel(new GridLayout(5, 1, 1, 10));
-		JPanel show = new JPanel();
-		JTabbedPane tabs = new JTabbedPane();
-		JButton pie = new JButton("Change counties");
-		JButton all = new JButton("Get All");
-		JButton back = new JButton("Back");
-		button.add(pie);
-		button.add(all);
-		button.add(back);
-		pickedCounties.setColumns(20);
-		show.add(scroller);
-		controlPanel.add(button);
-		controlPanel.add(show);
-		all.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int[] a = new int[fi.getDataObject().getDemocratics().size()];
-				for(int i=0;i<a.length;i++) a[i] = i;
-				getGraphs(a);
-				tabs.removeAll();
-				tabs.add("Pie", pg.getPieChart());
-				tabs.add("Bar", bg);
-				tabs.add("Text", td);
-				getPicked(a, pickedCounties);
-				repaint();
-			}
-		});
-		pie.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				pp.doClick();
-				getGraphs(pp.getSelected());
-				tabs.removeAll();
-				tabs.add("Pie", pg.getPieChart());
-				tabs.add("Bar", bg);
-				tabs.add("Text", td);
-				getPicked(pp.getSelected(), pickedCounties);
-				repaint();
-			}
-		});
-		back.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel1();
-				setContentPane(panel1);
-				invalidate();
-				validate();
-			}
-		});
-		tabs.add("Pie", pg.getPieChart());
-		tabs.add("Bar", bg);
-		tabs.add("Text", td);
-		panel3.add(tabs, BorderLayout.CENTER);
-		panel3.add(controlPanel, BorderLayout.WEST);
 	}
 	public static void main(String[] args) throws Exception {
 		new Screen();
