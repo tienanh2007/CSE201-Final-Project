@@ -32,6 +32,7 @@ public class DataObject {
 				while(in.hasNextLine()){
 					lines++;
 					String[] datas = in.nextLine().split(",");
+					if(datas.length != 5) break;
 					if(!checkForError(datas, lines, file.getName())){
 						if(states.contains(datas[0])){
 							int index = states.indexOf(datas[0]);
@@ -106,5 +107,8 @@ public class DataObject {
 	}
 	public HashMap<Integer, ArrayList<String>> getErrors(){
 		return errors;
+	}
+	public void resetErrors(){
+		errors.clear();
 	}
 }

@@ -51,12 +51,14 @@ public class FileChooser extends JPanel implements ActionListener {
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
 			File f = chooser.getSelectedFile();
 			adr.setText(f.getAbsolutePath());
+			files.clear();
 			for(File file:f.listFiles()){
 				files.add(file);
 			}
 			try {
 				d = new DataObject(files);
 				HashMap<Integer, ArrayList<String>> er = d.getErrors();
+				error = new StringBuilder();
 				for(int a: er.keySet()){
 					for(String s:er.get(a)){
 						error.append(s+"\n");
@@ -69,6 +71,7 @@ public class FileChooser extends JPanel implements ActionListener {
 				PrintWriter out = new PrintWriter(file);
 				out.write(error.toString());
 				out.close();
+				
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}

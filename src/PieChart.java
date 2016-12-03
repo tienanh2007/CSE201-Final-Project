@@ -48,7 +48,7 @@ class PieChart extends JComponent {
 			curValue += slices.get(i).value;
 		}
 		g2.setColor(Color.RED);
-		g2.setFont(new Font("scalable", Font.PLAIN, (int)(0.009*(getHeight()+getWidth()))));
+		g2.setFont(new Font("scalable", Font.PLAIN, (int)(0.011*(getHeight()+getWidth()))));
 		g2.drawString("Republicans: "+r , 25, 20);
 		g2.fillRect(10, 10, 10, 10);
 		g2.setColor(Color.BLUE);

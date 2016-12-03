@@ -18,6 +18,10 @@ public class PickingPane extends JButton{
 				JOptionPane.showMessageDialog(
 						null, list, "Multi-Select Example", JOptionPane.PLAIN_MESSAGE);
 				selected = list.getSelectedIndices();
+				if(selected.length == 0){
+					selected = new int[option.length];
+					for(int i=0;i<option.length;i++) selected[i] = i;
+				}
 			}
 		});
 	}
